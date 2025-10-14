@@ -11,7 +11,6 @@ interface TaskFormProps {
 export default function TaskForm({ categories, onAddTask }: TaskFormProps) {
   const [title, setTitle] = useState('');
   const [categoryId, setCategoryId] = useState('');
-  const [priority, setPriority] = useState<1 | 2 | 3 | 4>(3);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,12 +19,10 @@ export default function TaskForm({ categories, onAddTask }: TaskFormProps) {
         id: crypto.randomUUID(),
         title: title.trim(),
         categoryId,
-        priority,
         completed: false,
         createdAt: new Date(),
       });
       setTitle('');
-      setPriority(3);
     }
   };
 
@@ -60,16 +57,6 @@ export default function TaskForm({ categories, onAddTask }: TaskFormProps) {
                 {category.name}
               </option>
             ))}
-          </select>
-          <select
-            value={priority}
-            onChange={(e) => setPriority(Number(e.target.value) as 1 | 2 | 3 | 4)}
-            className="flex-1 px-3 py-2 border border-gray-300 rounded text-gray-900"
-          >
-            <option value={1}>P1: Urgent & Important</option>
-            <option value={2}>P2: Not Urgent but Important</option>
-            <option value={3}>P3: Urgent but Not Important</option>
-            <option value={4}>P4: Not Urgent & Not Important</option>
           </select>
           <button
             type="submit"

@@ -7,13 +7,11 @@ import CategoryManager from '@/components/CategoryManager';
 import TaskForm from '@/components/TaskForm';
 import TaskList from '@/components/TaskList';
 import WeeklySummary from '@/components/WeeklySummary';
-import PriorityMatrix from '@/components/PriorityMatrix';
 
 export default function Home() {
   const [categories, setCategories, categoriesLoaded] = useLocalStorage<Category[]>('categories', []);
   const [tasks, setTasks, tasksLoaded] = useLocalStorage<Task[]>('tasks', []);
   const [activeTab, setActiveTab] = useState<'active' | 'done' | 'summary'>('active');
-  const [sortBy, setSortBy] = useState<'category' | 'priority'>('category');
 
   const handleAddCategory = (category: Category) => {
     setCategories([...categories, category]);
@@ -59,8 +57,6 @@ export default function Home() {
 
         <CategoryManager categories={categories} onAddCategory={handleAddCategory} onDeleteCategory={handleDeleteCategory} />
 
-        <PriorityMatrix />
-
         <TaskForm categories={categories} onAddTask={handleAddTask} />
 
         <div className="bg-white rounded-lg shadow-sm border mb-4">
@@ -98,38 +94,12 @@ export default function Home() {
           </div>
 
           <div className="p-6">
-            {(activeTab === 'active' || activeTab === 'done') && (
-              <div className="mb-4 flex justify-end gap-2">
-                <span className="text-sm text-gray-600 self-center mr-2">View by:</span>
-                <button
-                  onClick={() => setSortBy('category')}
-                  className={`px-3 py-1 rounded text-sm font-medium ${
-                    sortBy === 'category'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  Category
-                </button>
-                <button
-                  onClick={() => setSortBy('priority')}
-                  className={`px-3 py-1 rounded text-sm font-medium ${
-                    sortBy === 'priority'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                  }`}
-                >
-                  Priority
-                </button>
-              </div>
-            )}
             {activeTab === 'active' && (
               <TaskList
                 tasks={tasks}
                 categories={categories}
                 onToggleTask={handleToggleTask}
                 showCompleted={false}
-                sortBy={sortBy}
               />
             )}
             {activeTab === 'done' && (
@@ -138,7 +108,6 @@ export default function Home() {
                 categories={categories}
                 onToggleTask={handleToggleTask}
                 showCompleted={true}
-                sortBy={sortBy}
               />
             )}
             {activeTab === 'summary' && (
