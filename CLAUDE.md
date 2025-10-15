@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a Next.js-based weekly task tracker application that helps users organize work by categories and priorities using the Eisenhower Matrix (Urgent/Important framework). All data is stored client-side in browser localStorage.
+This is a Next.js-based weekly task tracker application that helps users organize work by categories. All data is stored client-side in browser localStorage.
 
 ## Development Commands
 
@@ -40,7 +40,6 @@ The application uses browser localStorage for all persistence. The `useLocalStor
 ### Data Model
 
 **Task Interface:**
-- `priority`: 1-4 where 1=Urgent & Important, 2=Not Urgent but Important, 3=Urgent but Not Important, 4=Not Urgent & Not Important
 - Tasks are linked to categories via `categoryId`
 - `completedAt` is set when a task is marked complete
 
@@ -52,38 +51,22 @@ The application uses browser localStorage for all persistence. The `useLocalStor
 
 **app/page.tsx** (Main orchestrator)
 - Manages all state via useLocalStorage hooks
-- Coordinates between CategoryManager, TaskForm, TaskList, WeeklySummary, and PriorityMatrix
-- Handles view toggling (Active/Done/Summary tabs) and sort options (Category/Priority)
+- Coordinates between CategoryManager, TaskForm, TaskList, and WeeklySummary
+- Handles view toggling (Active/Done/Summary tabs)
 
 **TaskList Component:**
-- Accepts `sortBy` prop ('category' | 'priority') to switch grouping modes
-- In category view: groups by category, shows priority badges (P1-P4)
-- In priority view: groups by priority level, shows category badges
-- Tasks within groups are always sorted by priority (highest first)
+- Groups tasks by category
+- Displays tasks with their category colors and completion status
 
 **WeeklySummary Component:**
 - Calculates week start as Monday (not Sunday)
 - Filters tasks completed since the start of current week
 - Groups completed tasks by category
 
-**PriorityMatrix Component:**
-- Collapsible visual reference for Eisenhower Matrix
-- Shows all 4 priority quadrants with color coding and actionable descriptions
-
-### Priority System
-
-The app uses the Eisenhower Priority Matrix:
-- **P1 (Red bg-red-500)**: Urgent & Important - "DO FIRST"
-- **P2 (Orange bg-orange-500)**: Not Urgent but Important - "SCHEDULE"
-- **P3 (Yellow bg-yellow-500)**: Urgent but Not Important - "DELEGATE"
-- **P4 (Green bg-green-500)**: Not Urgent & Not Important - "ELIMINATE"
-
-Priority labels must be kept consistent across TaskForm dropdown, TaskList display, and PriorityMatrix guide.
-
 ### Styling
 
 - Uses Tailwind CSS with default configuration
-- Color scheme uses semantic priority colors (red/orange/yellow/green)
+- Categories have custom colors that are displayed throughout the UI
 - Text contrast requirements: main text uses `text-gray-900`, placeholders use `text-gray-400`
 
 ## Key Patterns
