@@ -1,6 +1,7 @@
 'use client';
 
 import { Task, Category } from '@/types';
+import { useState } from 'react';
 
 interface WeeklySummaryProps {
   tasks: Task[];
@@ -8,6 +9,8 @@ interface WeeklySummaryProps {
 }
 
 export default function WeeklySummary({ tasks, categories }: WeeklySummaryProps) {
+  const [copySuccess, setCopySuccess] = useState(false);
+
   const getStartOfWeek = () => {
     const now = new Date();
     const dayOfWeek = now.getDay();
@@ -35,16 +38,55 @@ export default function WeeklySummary({ tasks, categories }: WeeklySummaryProps)
     return acc;
   }, {} as Record<string, Task[]>);
 
+  const generateMarkdown = () => {
+    let markdown = `# Weekly Summary - Week of ${startOfWeek.toLocaleDateString()}\n\n`;
+    
+    Object.entries(groupedTasks).forEach(([categoryId, categoryTasks]) => {
+      const category = getCategoryById(categoryId);
+      if (category) {
+        markdown += `- ${category.name}\n`;
+        categoryTasks.forEach(task => {
+          markdown += `  - ${task.title}\n`;
+        });
+      }
+    });
+
+    return markdown;
+  };
+
+  const handleExport = async () => {
+    const markdown = generateMarkdown();
+    try {
+      await navigator.clipboard.writeText(markdown);
+      setCopySuccess(true);
+      setTimeout(() => setCopySuccess(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy to clipboard:', err);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <h2 className="text-xl font-bold text-blue-900 mb-1">This Week&apos;s Summary</h2>
-        <p className="text-sm text-blue-700">
-          Week starting {startOfWeek.toLocaleDateString()}
-        </p>
-        <p className="text-3xl font-bold text-blue-900 mt-2">
-          {weeklyTasks.length} {weeklyTasks.length === 1 ? 'task' : 'tasks'} completed
-        </p>
+        <div className="flex justify-between items-start">
+          <div className="flex-1">
+            <h2 className="text-xl font-bold text-blue-900 mb-1">This Week&apos;s Summary</h2>
+            <p className="text-sm text-blue-700">
+              Week starting {startOfWeek.toLocaleDateString()}
+            </p>
+            <p className="text-3xl font-bold text-blue-900 mt-2">
+              {weeklyTasks.length} {weeklyTasks.length === 1 ? 'task' : 'tasks'} completed
+            </p>
+          </div>
+          {weeklyTasks.length > 0 && (
+            <button
+              onClick={handleExport}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg transition-colors"
+            >
+              {copySuccess ? '✓ Copied!' : 'Export Markdown'}
+            </button>
+          )}
+        </div>
       </div>
 
       {weeklyTasks.length === 0 ? (
