@@ -14,21 +14,34 @@ const PRESET_COLORS = [
   '#8B5CF6', '#EC4899', '#6366F1', '#14B8A6'
 ];
 
+// Get a random color that hasn't been used yet
+function getRandomUnusedColor(usedColors: string[]): string {
+  const availableColors = PRESET_COLORS.filter(color => !usedColors.includes(color));
+  
+  if (availableColors.length === 0) {
+    // If all colors are used, pick a random color from all presets
+    return PRESET_COLORS[Math.floor(Math.random() * PRESET_COLORS.length)];
+  }
+  
+  return availableColors[Math.floor(Math.random() * availableColors.length)];
+}
+
 export default function CategoryManager({ categories, onAddCategory, onDeleteCategory }: CategoryManagerProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
-  const [selectedColor, setSelectedColor] = useState(PRESET_COLORS[0]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (newCategoryName.trim()) {
+      const usedColors = categories.map(cat => cat.color);
+      const randomColor = getRandomUnusedColor(usedColors);
+      
       onAddCategory({
         id: crypto.randomUUID(),
         name: newCategoryName.trim(),
-        color: selectedColor,
+        color: randomColor,
       });
       setNewCategoryName('');
-      setSelectedColor(PRESET_COLORS[0]);
       setIsAdding(false);
     }
   };
@@ -57,22 +70,6 @@ export default function CategoryManager({ categories, onAddCategory, onDeleteCat
             className="w-full px-3 py-2 border border-gray-300 rounded mb-3 text-gray-900 placeholder-gray-400"
             autoFocus
           />
-          <div className="mb-3">
-            <label className="block text-sm font-medium mb-2 text-gray-900">Color</label>
-            <div className="flex gap-2">
-              {PRESET_COLORS.map((color) => (
-                <button
-                  key={color}
-                  type="button"
-                  onClick={() => setSelectedColor(color)}
-                  className={`w-8 h-8 rounded-full border-2 ${
-                    selectedColor === color ? 'border-gray-800 scale-110' : 'border-gray-300'
-                  }`}
-                  style={{ backgroundColor: color }}
-                />
-              ))}
-            </div>
-          </div>
           <div className="flex gap-2">
             <button
               type="submit"
