@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Task, Category } from '@/types';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import CategoryManager from '@/components/CategoryManager';
@@ -6,37 +6,12 @@ import TaskForm from '@/components/TaskForm';
 import TaskList from '@/components/TaskList';
 import WeeklySummary from '@/components/WeeklySummary';
 import { appWindow } from '@tauri-apps/api/window';
-import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
-import { relaunch } from '@tauri-apps/api/process';
 
 export default function App() {
   const [categories, setCategories, categoriesLoaded] = useLocalStorage<Category[]>('categories', []);
   const [tasks, setTasks, tasksLoaded] = useLocalStorage<Task[]>('tasks', []);
   const [activeTab, setActiveTab] = useState<'active' | 'done' | 'summary'>('active');
   const [sortBy, setSortBy] = useState<'category' | 'priority'>('category');
-
-  // Check for updates on app startup
-  useEffect(() => {
-    async function checkForUpdates() {
-      try {
-        const { shouldUpdate, manifest } = await checkUpdate();
-        if (shouldUpdate) {
-          const installNow = window.confirm(
-            `Update to version ${manifest?.version} is available!\n\nWould you like to install it now?`
-          );
-          if (installNow) {
-            await installUpdate();
-            await relaunch();
-          }
-        }
-      } catch (error) {
-        // Silently fail - updates are not critical
-        console.error('Update check failed:', error);
-      }
-    }
-
-    checkForUpdates();
-  }, []);
 
   const handleAddCategory = (category: Category) => {
     setCategories([...categories, category]);
