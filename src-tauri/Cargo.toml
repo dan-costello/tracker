@@ -1,5 +1,5 @@
 [package]
-name = "weekly-tracker"
+name = "Triage"
 version = "0.1.0"
 description = "Weekly Task Tracker"
 authors = ["you"]
@@ -14,7 +14,7 @@ tauri-build = { version = "1.5", features = [] }
 [dependencies]
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.7", features = [ "window-start-dragging", "shell-open"] }
+tauri = { version = "1.7", features = [ "window-close", "window-minimize", "window-start-dragging", "shell-open", "updater"] }
 
 [features]
 # by default Tauri runs in production mode

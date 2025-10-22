@@ -1,16 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Task, Category } from '@/types';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import CategoryManager from '@/components/CategoryManager';
 import TaskForm from '@/components/TaskForm';
 import TaskList from '@/components/TaskList';
 import WeeklySummary from '@/components/WeeklySummary';
+import { appWindow } from '@tauri-apps/api/window';
+import { checkUpdate, installUpdate } from '@tauri-apps/api/updater';
+import { relaunch } from '@tauri-apps/api/process';
 
 export default function App() {
   const [categories, setCategories, categoriesLoaded] = useLocalStorage<Category[]>('categories', []);
   const [tasks, setTasks, tasksLoaded] = useLocalStorage<Task[]>('tasks', []);
   const [activeTab, setActiveTab] = useState<'active' | 'done' | 'summary'>('active');
   const [sortBy, setSortBy] = useState<'category' | 'priority'>('category');
+
+  // Check for updates on app startup
+  useEffect(() => {
+    async function checkForUpdates() {
+      try {
+        const { shouldUpdate, manifest } = await checkUpdate();
+        if (shouldUpdate) {
+          const installNow = window.confirm(
+            `Update to version ${manifest?.version} is available!\n\nWould you like to install it now?`
+          );
+          if (installNow) {
+            await installUpdate();
+            await relaunch();
+          }
+        }
+      } catch (error) {
+        // Silently fail - updates are not critical
+        console.error('Update check failed:', error);
+      }
+    }
+
+    checkForUpdates();
+  }, []);
 
   const handleAddCategory = (category: Category) => {
     setCategories([...categories, category]);
@@ -59,10 +85,26 @@ export default function App() {
   return (
     <main className="h-screen bg-gray-100 dark:bg-gray-900 overflow-y-auto min-w-[280px] max-w-[480px] w-80 flex flex-col">
       <div
-        className="w-full h-8 bg-gray-200 dark:bg-gray-800 flex items-center justify-center cursor-move select-none"
+        className="w-full h-8 bg-gray-200 dark:bg-gray-800 flex items-center justify-between px-2 cursor-move select-none"
         data-tauri-drag-region
       >
         <div className="w-12 h-1 bg-gray-400 dark:bg-gray-600 rounded-full"></div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => appWindow.minimize()}
+            className="w-6 h-6 flex items-center justify-center hover:bg-gray-300 dark:hover:bg-gray-700 rounded text-gray-600 dark:text-gray-400 text-sm cursor-pointer"
+            title="Minimize"
+          >
+            −
+          </button>
+          <button
+            onClick={() => appWindow.close()}
+            className="w-6 h-6 flex items-center justify-center hover:bg-red-500 hover:text-white rounded text-gray-600 dark:text-gray-400 text-sm cursor-pointer"
+            title="Close"
+          >
+            ×
+          </button>
+        </div>
       </div>
       <div className="flex-1 overflow-y-auto px-3 pb-3">
         <header className="mb-4 pt-3">

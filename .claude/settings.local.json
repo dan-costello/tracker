@@ -7,7 +7,8 @@
       "Bash(npm run tauri:dev:*)",
       "Bash(netstat:*)",
       "Bash(pnpm install:*)",
-      "Bash(pnpm run tauri:*)"
+      "Bash(pnpm run tauri:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []
