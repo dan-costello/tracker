@@ -22,9 +22,6 @@
         "startDragging": true,
         "minimize": true,
         "close": true
-      },
-      "updater": {
-        "active": true
       }
     },
     "updater": {
