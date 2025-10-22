@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npx @tauri-apps/cli@1 icon:*)",
+      "Bash(npm run tauri:dev:*)",
+      "Bash(netstat:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm run tauri:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

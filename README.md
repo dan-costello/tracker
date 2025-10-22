@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Triage
+
+A sleek, sidebar-style desktop task manager focused on simple prioritization. Organize your tasks by categories and time-based priorities (Today/Soon/Later) with a clean, minimalist interface.
+
+## Features
+
+- **Time-Based Prioritization**: Organize tasks by Today (urgent), Soon (next few days), or Later (future/backlog)
+- **Category Management**: Create custom categories with auto-assigned colors
+- **Sidebar Design**: Compact 280-480px width, resizable sidebar that stays out of your way
+- **Dark Mode**: Automatically matches your system preference
+- **Weekly Summary**: Track completed tasks by week
+- **Local Storage**: All data stored locally, no cloud sync
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- pnpm (recommended) or npm
+
+### Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+pnpm install
+
+# Start Tauri dev server (desktop app)
+pnpm run tauri:dev
+
+# Start Vite dev server (web preview)
+pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The web preview runs at http://localhost:5173
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Building
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# Build desktop app (creates native executable)
+pnpm run tauri:build
 
-## Learn More
+# Build for web only
+pnpm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Frontend**: React 19 + TypeScript + Tailwind CSS v4
+- **Desktop**: Tauri 1.6 (Rust-based)
+- **Build Tool**: Vite 6
+- **Storage**: Browser localStorage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+├── src/
+│   ├── components/     # React components
+│   ├── hooks/          # Custom React hooks
+│   ├── types/          # TypeScript interfaces
+│   └── App.tsx         # Main application
+├── src-tauri/          # Tauri/Rust code
+│   └── tauri.conf.json # Tauri configuration
+└── public/             # Static assets
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Priority System
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Today** (Red): Must do today - immediate/urgent tasks
+- **Soon** (Orange): Next few days - important but not immediate
+- **Later** (Blue): Future/someday - backlog items
+
+## License
+
+MIT

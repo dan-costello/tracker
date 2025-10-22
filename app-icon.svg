@@ -1,0 +1,17 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="100" fill="#2D3748"/>
+
+  <!-- Checkmark -->
+  <path d="M150 260 L220 330 L370 180" stroke="#10B981" stroke-width="45" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- Priority Dots -->
+  <!-- Red dot (Today) -->
+  <circle cx="180" cy="390" r="28" fill="#EF4444"/>
+
+  <!-- Orange dot (Soon) -->
+  <circle cx="256" cy="390" r="28" fill="#F59E0B"/>
+
+  <!-- Blue dot (Later) -->
+  <circle cx="332" cy="390" r="28" fill="#3B82F6"/>
+</svg>

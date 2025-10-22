@@ -10,12 +10,19 @@
 !.yarn/releases
 !.yarn/versions
 
+# pnpm
+pnpm-lock.yaml
+.pnpm-store
+
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
+# vite
+/dist
+
+# tauri
+/src-tauri/target
+/src-tauri/Cargo.lock
 
 # production
 /build
