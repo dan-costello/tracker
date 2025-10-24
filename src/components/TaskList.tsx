@@ -112,6 +112,14 @@ export default function TaskList({ tasks, categories, onToggleTask, onDeleteTask
           const orderB = getPriorityLabel(b as 'today' | 'soon' | 'later').order;
           return orderA - orderB;
         }
+        if (sortBy === 'category') {
+          // Sort category groups alphabetically by category name
+          const categoryA = getCategoryById(a);
+          const categoryB = getCategoryById(b);
+          if (categoryA && categoryB) {
+            return categoryA.name.localeCompare(categoryB.name);
+          }
+        }
         return 0;
       }).map(([groupKey, groupTasks]) => {
         if (sortBy === 'category') {
@@ -134,7 +142,7 @@ export default function TaskList({ tasks, categories, onToggleTask, onDeleteTask
                   className="font-semibold text-white px-2 py-0.5 rounded text-xs"
                   style={{ backgroundColor: category.color }}
                 >
-                  {category.name} ({groupTasks.length})
+                  {category.name}
                 </h3>
                 <span className="text-gray-500 dark:text-gray-400 text-sm">{isExpanded ? '▼' : '▶'}</span>
               </button>
