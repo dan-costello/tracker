@@ -49,6 +49,12 @@ export default function App() {
     ));
   };
 
+  const handleChangeCategory = (taskId: string, newCategoryId: string) => {
+    setTasks(tasks.map(task =>
+      task.id === taskId ? { ...task, categoryId: newCategoryId } : task
+    ));
+  };
+
   if (!categoriesLoaded || !tasksLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
@@ -58,7 +64,7 @@ export default function App() {
   }
 
   return (
-    <main className="h-screen bg-gray-100 dark:bg-gray-900 overflow-y-auto min-w-[280px] max-w-[480px] w-80 flex flex-col">
+    <main className="h-screen w-full bg-gray-100 dark:bg-gray-900 overflow-y-auto overflow-x-hidden flex flex-col">
       <div
         className="w-full h-8 bg-gray-200 dark:bg-gray-800 flex items-center justify-between px-2 cursor-move select-none"
         data-tauri-drag-region
@@ -159,6 +165,7 @@ export default function App() {
                 onToggleTask={handleToggleTask}
                 onDeleteTask={handleDeleteTask}
                 onChangePriority={handleChangePriority}
+                onChangeCategory={handleChangeCategory}
                 showCompleted={false}
                 sortBy={sortBy}
               />
@@ -170,6 +177,7 @@ export default function App() {
                 onToggleTask={handleToggleTask}
                 onDeleteTask={handleDeleteTask}
                 onChangePriority={handleChangePriority}
+                onChangeCategory={handleChangeCategory}
                 showCompleted={true}
                 sortBy={sortBy}
               />
